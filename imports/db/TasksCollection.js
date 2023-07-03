@@ -9,12 +9,12 @@ export const insertTask = (text, userId) =>
     createdAt: new Date(),
   });
 
-export const toggleChecked = ({ _id, isChecked }) => {
-  TasksCollection.update(_id, {
+export const toggleChecked = (taskId, isChecked) => {
+  TasksCollection.update(taskId, {
     $set: {
       isChecked: !isChecked,
     },
   });
 };
 
-export const deleteTask = ({ _id }) => TasksCollection.remove(_id);
+export const deleteTask = (taskId) => TasksCollection.remove(taskId);

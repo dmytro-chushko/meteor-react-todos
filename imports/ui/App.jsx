@@ -1,13 +1,10 @@
+import { Meteor } from "meteor/meteor";
 import React, { useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 
 import { TaskForm } from "./TaskForm.jsx";
 import { Task } from "./Task.jsx";
-import {
-  TasksCollection,
-  deleteTask,
-  toggleChecked,
-} from "../api/TasksCollection.js";
+import { TasksCollection } from "../db/TasksCollection.js";
 import { LoginForm } from "./LoginForm.jsx";
 import { logout } from "../api/user.js";
 
@@ -33,12 +30,17 @@ export const App = () => {
     }
 
     return TasksCollection.find(
-      hideCompleted ? hideCompletedFilter : userFilter,
+      hideCompleted ? pendingOnlyFilter : userFilter,
       {
         sort: { createdAt: -1 },
       }
     ).fetch();
   });
+
+  const handleToggleChacked = ({ _id, isChecked }) =>
+    Meteor.call("tasks.setIsChecked", _id, isChecked);
+
+  const handleDeleteTask = ({ _id }) => Meteor.call("tasks.remove", _id);
 
   return (
     <div className="app">
@@ -57,7 +59,7 @@ export const App = () => {
           <div className="user" onClick={logout}>
             {user.username || user.profile.name} Log Out
           </div>
-          <TaskForm user={user} />
+          <TaskForm />
           <div className="filter">
             <button
               type="button"
@@ -71,8 +73,8 @@ export const App = () => {
               <Task
                 key={task._id}
                 task={task}
-                onCheckboxClick={toggleChecked}
-                onDeleteClick={deleteTask}
+                onCheckboxClick={handleToggleChacked}
+                onDeleteClick={handleDeleteTask}
               />
             ))}
           </ul>

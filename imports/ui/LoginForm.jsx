@@ -25,7 +25,7 @@ export const LoginForm = () => {
         <input
           type="text"
           placeholder="Username"
-          name="username"
+          id="username"
           required
           onChange={handleOnChangeUsername}
         />
@@ -37,7 +37,7 @@ export const LoginForm = () => {
         <input
           type="text"
           placeholder="Paasword"
-          name="password"
+          id="password"
           required
           onChange={handleOnChangePass}
         />
