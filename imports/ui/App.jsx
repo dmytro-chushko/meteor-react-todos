@@ -55,7 +55,7 @@ export const App = () => {
       {user ? (
         <>
           <div className="user" onClick={logout}>
-            {user.username} Log Out
+            {user.username || user.profile.name} Log Out
           </div>
           <TaskForm user={user} />
           <div className="filter">

@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import { Accounts } from "meteor/accounts-base";
 import { TasksCollection } from "../imports/api/TasksCollection";
-// import { LinksCollection } from '/imports/api/links';
+import { ServiceConfiguration } from "meteor/service-configuration";
 
 const tasks = [
   "First Task",
@@ -38,37 +38,13 @@ Meteor.startup(() => {
   }
 });
 
-// async function insertLink({ title, url }) {
-//   await LinksCollection.insertAsync({ title, url, createdAt: new Date() });
-// }
-
-// Meteor.startup(async () => {
-//   // If the Links collection is empty, add some data.
-//   if (await LinksCollection.find().countAsync() === 0) {
-//     await insertLink({
-//       title: 'Do the Tutorial',
-//       url: 'https://www.meteor.com/tutorials/react/creating-an-app',
-//     });
-
-//     await insertLink({
-//       title: 'Follow the Guide',
-//       url: 'https://guide.meteor.com',
-//     });
-
-//     await insertLink({
-//       title: 'Read the Docs',
-//       url: 'https://docs.meteor.com',
-//     });
-
-//     await insertLink({
-//       title: 'Discussions',
-//       url: 'https://forums.meteor.com',
-//     });
-//   }
-
-//   // We publish the entire Links collection to all clients.
-//   // In order to be fetched in real-time to the clients
-//   Meteor.publish("links", function () {
-//     return LinksCollection.find();
-//   });
-// });
+ServiceConfiguration.configurations.upsert(
+  { service: "github" },
+  {
+    $set: {
+      loginStyle: "popup",
+      clientId: "00675835ebf9ec6cde13",
+      secret: "2ebbc66a1ab351404a4a53e62d49c9741eeef67f",
+    },
+  }
+);

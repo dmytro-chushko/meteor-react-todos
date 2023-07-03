@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { login } from "../api/user";
+import { LoginWithGithub } from "./LoginWithGitHub";
 
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -17,6 +18,7 @@ export const LoginForm = () => {
 
   return (
     <form onSubmit={onSubmit} className="login-form">
+      <LoginWithGithub />
       <div>
         <label htmlFor="username">Username</label>
 
