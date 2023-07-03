@@ -1,4 +1,5 @@
 import { Meteor } from "meteor/meteor";
+import { Accounts } from "meteor/accounts-base";
 import { TasksCollection } from "../imports/api/TasksCollection";
 // import { LinksCollection } from '/imports/api/links';
 
@@ -12,9 +13,28 @@ const tasks = [
   "Seventh Task",
 ];
 
+const insertTask = (taskText, user) =>
+  TasksCollection.insert({
+    text: taskText,
+    userId: user._id,
+    createdAt: new Date(),
+  });
+
+const SEED_USERNAME = "dmytro";
+const SEED_PASSWORD = "123456";
+
 Meteor.startup(() => {
+  if (!Accounts.findUserByUsername(SEED_USERNAME)) {
+    Accounts.createUser({
+      username: SEED_USERNAME,
+      password: SEED_PASSWORD,
+    });
+  }
+
+  const user = Accounts.findUserByUsername(SEED_USERNAME);
+
   if (TasksCollection.find().count() === 0) {
-    tasks.forEach((task) => TasksCollection.insert({ text: task }));
+    tasks.forEach((taskText) => insertTask(taskText, user));
   }
 });
 
