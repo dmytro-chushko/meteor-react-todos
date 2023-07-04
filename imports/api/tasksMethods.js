@@ -1,14 +1,31 @@
 import { Meteor } from "meteor/meteor";
 import { check } from "meteor/check";
-import { deleteTask, insertTask, toggleChecked } from "../db/TasksCollection";
+import {
+  deleteTask,
+  insertTask,
+  toggleChecked,
+  TasksCollection,
+} from "../db/TasksCollection";
 
 Meteor.methods({
-  "tasks.insert"(text) {
-    check(text, String);
-
+  "check.authentication"() {
     if (!this.userId) {
       throw new Meteor.Error("Not authorized.");
     }
+  },
+
+  "check.authorization"(taskId) {
+    const task = TasksCollection.findOne({ _id: taskId, userId: this.userId });
+
+    if (!task) {
+      throw new Meteor.Error("Access denied");
+    }
+  },
+
+  "tasks.insert"(text) {
+    check(text, String);
+
+    Meteor.call("check.authentication");
 
     insertTask(text, this.userId);
   },
@@ -16,9 +33,9 @@ Meteor.methods({
   "tasks.remove"(taskId) {
     check(taskId, String);
 
-    if (!this.userId) {
-      throw new Meteor.Error("Not authorized.");
-    }
+    Meteor.call("check.authentication");
+
+    Meteor.call("check.authorization", taskId);
 
     deleteTask(taskId);
   },
@@ -27,9 +44,9 @@ Meteor.methods({
     check(taskId, String);
     check(isChecked, Boolean);
 
-    if (!this.userId) {
-      throw new Meteor.Error("Not authorized.");
-    }
+    Meteor.call("check.authentication");
+
+    Meteor.call("check.authorization", taskId);
 
     toggleChecked(taskId, isChecked);
   },

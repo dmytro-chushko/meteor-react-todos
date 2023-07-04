@@ -16,25 +16,27 @@ export const App = () => {
   const userFilter = user ? { userId: user._id } : {};
   const pendingOnlyFilter = { ...hideCompletedFilter, ...userFilter };
 
-  const pendingTasksCount = useTracker(() => {
-    if (!user) {
-      return 0;
+  const { tasks, pendingTasksCount, isLoading } = useTracker(() => {
+    const noDataAvailable = { tasks: [], pendongTasksCount: 0 };
+    if (!Meteor.user()) {
+      return noDataAvailable;
+    }
+    const handler = Meteor.subscribe("tasks");
+
+    if (!handler.ready()) {
+      return { ...noDataAvailable, isLoading: true };
     }
 
-    return TasksCollection.find(pendingOnlyFilter).count();
-  });
-
-  const tasks = useTracker(() => {
-    if (!user) {
-      return [];
-    }
-
-    return TasksCollection.find(
+    const tasks = TasksCollection.find(
       hideCompleted ? pendingOnlyFilter : userFilter,
       {
         sort: { createdAt: -1 },
       }
     ).fetch();
+
+    const pendingTasksCount = TasksCollection.find(pendingOnlyFilter).count();
+
+    return { tasks, pendingTasksCount };
   });
 
   const handleToggleChacked = ({ _id, isChecked }) =>

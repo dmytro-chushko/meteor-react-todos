@@ -3,6 +3,7 @@ import { Accounts } from "meteor/accounts-base";
 import { TasksCollection, insertTask } from "../imports/db/TasksCollection";
 import { ServiceConfiguration } from "meteor/service-configuration";
 import "/imports/api/tasksMethods";
+import "/imports/api/tasksPublications";
 
 const tasks = [
   "First Task",
