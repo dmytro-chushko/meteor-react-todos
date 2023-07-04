@@ -1,46 +1,24 @@
 import { Meteor } from "meteor/meteor";
-import React, { useState } from "react";
-import { useTracker } from "meteor/react-meteor-data";
+import React from "react";
 
 import { TaskForm } from "./TaskForm.jsx";
 import { Task } from "./Task.jsx";
-import { TasksCollection } from "../db/TasksCollection.js";
 import { LoginForm } from "./LoginForm.jsx";
 import { logout } from "../api/user.js";
+import { useAppContext } from "../provider/ContextProvider.jsx";
 
 export const App = () => {
-  const [hideCompleted, setHideCompleted] = useState(false);
-  const hideCompletedFilter = { isChecked: { $ne: true } };
-
-  const user = useTracker(() => Meteor.user());
-  const userFilter = user ? { userId: user._id } : {};
-  const pendingOnlyFilter = { ...hideCompletedFilter, ...userFilter };
-
-  const { tasks, pendingTasksCount, isLoading } = useTracker(() => {
-    const noDataAvailable = { tasks: [], pendongTasksCount: 0 };
-    if (!Meteor.user()) {
-      return noDataAvailable;
-    }
-    const handler = Meteor.subscribe("tasks");
-
-    if (!handler.ready()) {
-      return { ...noDataAvailable, isLoading: true };
-    }
-
-    const tasks = TasksCollection.find(
-      hideCompleted ? pendingOnlyFilter : userFilter,
-      {
-        sort: { createdAt: -1 },
-      }
-    ).fetch();
-
-    const pendingTasksCount = TasksCollection.find(pendingOnlyFilter).count();
-
-    return { tasks, pendingTasksCount };
-  });
+  const {
+    tasks,
+    user,
+    pendingTasksCount,
+    hideCompleted,
+    setHideCompleted,
+    isLoading,
+  } = useAppContext();
 
   const handleToggleChacked = ({ _id, isChecked }) =>
-    Meteor.call("tasks.setIsChecked", _id, isChecked);
+    Meteor.call("tasks.setIsChecked", _id, !isChecked);
 
   const handleDeleteTask = ({ _id }) => Meteor.call("tasks.remove", _id);
 

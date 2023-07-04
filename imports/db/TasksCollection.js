@@ -12,7 +12,7 @@ export const insertTask = (text, userId) =>
 export const toggleChecked = (taskId, isChecked) => {
   TasksCollection.update(taskId, {
     $set: {
-      isChecked: !isChecked,
+      isChecked: isChecked,
     },
   });
 };
