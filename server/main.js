@@ -21,12 +21,15 @@ const tasks = [
 //     userId: user._id,
 //     createdAt: new Date(),
 //   });
+// const Users = new Mongo.Collection("users");
 
-const SEED_USERNAME = "dmytro";
+const SEED_USERNAME = "dmytro1";
 const SEED_PASSWORD = "123456";
 
 Meteor.startup(() => {
-  if (!Accounts.findUserByUsername(SEED_USERNAME)) {
+  console.log(Meteor.users.findOne({ username: SEED_USERNAME }));
+  if (!Meteor.users.findOne({ username: SEED_USERNAME })) {
+    console.log("user");
     Accounts.createUser({
       username: SEED_USERNAME,
       password: SEED_PASSWORD,

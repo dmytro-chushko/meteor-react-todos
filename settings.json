@@ -1,0 +1,5 @@
+{
+  "mongo": {
+    "url": "mongodb+srv://Dmytro:dPZoD6D3bo2endE3@cluster0.nwpxzjg.mongodb.net/meteor-todos-db"
+  }
+}

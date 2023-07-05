@@ -19,11 +19,12 @@ export const ContextProvider = ({ children }) => {
   const pendingOnlyFilter = { ...hideCompletedFilter, ...userFilter };
 
   const { tasks, pendingTasksCount, isLoading } = useTracker(() => {
-    const noDataAvailable = { tasks: [], pendongTasksCount: 0 };
+    const noDataAvailable = { tasks: [], pendingTasksCount: 0 };
     if (!Meteor.user()) {
       return noDataAvailable;
     }
     const handler = Meteor.subscribe("tasks");
+    console.log(handler);
 
     if (!handler.ready()) {
       return { ...noDataAvailable, isLoading: true };
