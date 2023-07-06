@@ -21,14 +21,13 @@ const tasks = [
 //     userId: user._id,
 //     createdAt: new Date(),
 //   });
-// const Users = new Mongo.Collection("users");
+// const Users = new Mongo.Collection("users", { bypassCollection2: true });
 
-const SEED_USERNAME = "dmytro1";
+const SEED_USERNAME = "dmytro2";
 const SEED_PASSWORD = "123456";
 
 Meteor.startup(() => {
-  console.log(Meteor.users.findOne({ username: SEED_USERNAME }));
-  if (!Meteor.users.findOne({ username: SEED_USERNAME })) {
+  if (!Accounts.findUserByUsername(SEED_USERNAME)) {
     console.log("user");
     Accounts.createUser({
       username: SEED_USERNAME,
@@ -39,7 +38,7 @@ Meteor.startup(() => {
   const user = Accounts.findUserByUsername(SEED_USERNAME);
 
   if (TasksCollection.find({}).count() === 0) {
-    tasks.forEach((taskText) => insertTask(taskText, user));
+    tasks.forEach((taskText) => insertTask(taskText, user._id));
   }
 });
 
