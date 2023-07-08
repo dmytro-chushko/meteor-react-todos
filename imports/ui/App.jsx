@@ -18,14 +18,9 @@ export const App = () => {
   } = useAppContext();
 
   const handleToggleChacked = ({ _id, isChecked }) =>
-    Meteor.call(
-      "tasks.setIsChecked",
-      _id,
-      !isChecked
-      // (error) => {
-      // alert(error.error);
-      // }
-    );
+    Meteor.call("tasks.setIsChecked", _id, !isChecked, (error) => {
+      alert(error.error);
+    });
 
   const handleDeleteTask = ({ _id }) => Meteor.call("tasks.remove", _id);
 

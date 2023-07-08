@@ -31,7 +31,7 @@ Meteor.methods({
   },
 
   "tasks.remove"(taskId) {
-    check(taskId, String);
+    check(taskId, Number);
 
     Meteor.call("check.authentication");
 

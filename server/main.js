@@ -15,14 +15,6 @@ const tasks = [
   "Seventh Task",
 ];
 
-// const insertTask = (taskText, user) =>
-//   TasksCollection.insert({
-//     text: taskText,
-//     userId: user._id,
-//     createdAt: new Date(),
-//   });
-// const Users = new Mongo.Collection("users", { bypassCollection2: true });
-
 const SEED_USERNAME = "dmytro2";
 const SEED_PASSWORD = "123456";
 
