@@ -19,7 +19,7 @@ export const App = () => {
 
   const handleToggleChacked = ({ _id, isChecked }) =>
     Meteor.call("tasks.setIsChecked", _id, !isChecked, (error) => {
-      alert(error.error);
+      console.log(error.error);
     });
 
   const handleDeleteTask = ({ _id }) => Meteor.call("tasks.remove", _id);
